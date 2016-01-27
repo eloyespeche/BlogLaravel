@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Http\Requests\TagsRequest;
+use App\Http\Requests\TagRequest;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Tag;
@@ -18,8 +18,8 @@ class TagsController extends Controller
      */
     public function index(Request $request)
     {
-        // llamamos a todos los tags y paginamos a 5 a la vez
-        $tags = Tag::orderBy('id','DESC')->paginate(5);
+        // llamamos a todos los tags y paginamos a 15 a la vez
+        $tags = Tag::orderBy('id','DESC')->paginate(15);
         return view('admin.tags.index')->with('tags', $tags);
     }
 

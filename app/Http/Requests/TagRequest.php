@@ -13,7 +13,7 @@ class TagRequest extends Request
      */
     public function authorize()
     {
-        return true;  // cambiamos a true
+        return true;
     }
 
     /**

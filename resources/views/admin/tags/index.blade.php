@@ -4,7 +4,7 @@
 
 @section('content')
     <a href="{{ route('admin.tags.create') }}"
-       class="btn btn-info">
+       class="btn btn-default">
      	Registrar nuevo tag
     </a>
     <!-- BUSCADOR DE TAGS -->
