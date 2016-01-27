@@ -20,7 +20,7 @@
           <li class=""><a href="#">Articulos<span class="sr-only">(current)</span></a></li>
           <li class=""><a href="{{ route('admin.categories.index') }}">Categorias<span class="sr-only">(current)</span></a></li>
           <li class=""><a href="#">Imágenes<span class="sr-only">(current)</span></a></li>
-          <li class=""><a href="#">Tags<span class="sr-only">(current)</span></a></li>
+          <li class=""><a href="{{ route('admin.tags.index') }}">Tags<span class="sr-only">(current)</span></a></li>
         </ul>
       </div>
       
