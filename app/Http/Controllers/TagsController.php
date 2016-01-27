@@ -18,7 +18,6 @@ class TagsController extends Controller
      */
     public function index(Request $request)
     {
-        // llamamos a todos los tags y paginamos a 15 a la vez
         $tags = Tag::orderBy('id','DESC')->paginate(15);
         return view('admin.tags.index')->with('tags', $tags);
     }
