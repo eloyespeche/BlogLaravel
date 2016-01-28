@@ -49,20 +49,11 @@ class ArticlesController extends Controller
     public function create()
     {
         // nos traemos todas las categorías
-        $categories = Category::orderBy('name','ASC')
-            ->lists('name', 'id');
-                    // (se empleará en el select de la
-                    // vista)
-                    // lists() va a mostrar sólo las
-                    // columnas 'name' e 'id'
-        // obtenemos todos los tags
-        $tags = Tag::orderBy('name','ASC')
-            ->lists('name', 'id');
+        $categories = Category::orderBy('name','ASC')->lists('name', 'id');
+        
+        $tags = Tag::orderBy('name','ASC')->lists('name', 'id');
 
-        return view('admin.articles.create')
-            ->with('categories', $categories)
-            ->with('tags', $tags);
-
+        return view('admin.articles.create')->with('categories', $categories)->with('tags', $tags);
     }
 
     /**
@@ -78,89 +69,33 @@ class ArticlesController extends Controller
         if($request->file('image'))
         {
             $file = $request->file('image');
-            //dd($file);
-                /*
-                    Visualiza:
-                    UploadedFile {#29 ▼
-                      -test: false
-                      -originalName: "a.png"
-                      -mimeType: "image/png"
-                      -size: 2381
-                      -error: 0
+            
+            $name = 'blogfacilito_' . time() . '.' . $file->getClientOriginalExtension();
 
-                 */
-
-            // Esto lo utilizamos por si se mandan 2 ficheros
-            // con el mismo nombre. Para evitar la colisión.
-            $name = 'blogfacilito_' .
-                    time() .
-                    '.' .
-                    $file->getClientOriginalExtension();
-
-            //dd($name);
-                /*
-                    Visualiza:
-                    "blogfacilito_1448476889.png"
-                    (si actualizamos la página, obtenemos otro
-                    nombre único)
-                    "blogfacilito_1448476986.png"
-                 */
+            
             $path = public_path() . '/img/articles/';
-            //dd($path);
-                /*
-                    Visualiza:
-                    "C:\xampp\htdocs\CodigoFacilitoLaravel5\
-                    Projects\blog\public/images/articles/"
-                 */
-
+            
             $file->move($path, $name);
         }
 
-
+        
         $article = new Article($request->all());
-        // para obtener el usuario autentificado
+        
         $article->user_id = \Auth::user()->id;
-        //dd($article);
-                /*
-                    Visualiza:
-                      ....
-                      #attributes: array:3 [▼
-                        "title" => "título"
-                        "category_id" => "1"
-                        "content" => "contenido"
-                      ]
-                      ....
-                 */
-        //dd(\Auth::user()->id);
-                /*
-                    Visualiza: 1
-                 */
+        
         $article->save();
 
         $article->tags()->sync($request->tags);
-                // sync lo que hace es rellenar la tabla
-                // pivote
-
 
         $image = new Image();
-        $image->name = $name;
-        // Si varias personas están creando un artículo a la
-        // misma vez, podríamos tener un problema, ya que
-        // podríamos almacenar el id de un artículo incorrecto.
-        // Para evitarlo:
-        $image->article()->associate($article);
-                // associate() lo que va a hacer es pasar
-                // como parámetro el objeto $article, y va
-                // a tomar que es lo que lo asocia, en
-                // este caso lo que asocia a las imágenes
-                // y los artículos sería la llave foránea
-                // 'article_id'
 
+        $image->name = $name;
+
+        $image->article()->associate($article);
+        
         $image->save();
 
-        Flash::success('Se ha creado el artículo ' .
-                       $article->title .
-                       ' de forma satisfactoria!');
+        Flash::success('Se ha creado el artículo ' . $article->title . ' de forma satisfactoria!');
 
 
         return redirect()->route('admin.articles.index');
